@@ -279,8 +279,8 @@ if __name__ == '__main__':
             if not app:
                 print(f"not find {bundle_id}")
             name = app.get('ExecutableName')
-        machTimeInfo = rpc.device_info.machTimeInfo()
-        mach_time_factor = machTimeInfo[1] / machTimeInfo[2]
+        mach_time_info = rpc.device_info.machTimeInfo()
+        mach_time_factor = mach_time_info[1] / mach_time_info[2]
         sysmontap_thread = threading.Thread(target=run_sysmontap,
                                             args=(rpc, performance_analyzer.on_callback_proc_message, stop_even))
         gpu_thread = threading.Thread(target=run_gpu,
