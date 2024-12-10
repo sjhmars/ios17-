@@ -212,7 +212,6 @@ class PerformanceAnalyzer:
                     self.time_count = 0
 
     def create_report(self):
-        # 将五个字典列表放入一个列表中
         all_dict_lists = [self.app_performance_result_list, self.fps_result_list, self.memory_result_list,
                           self.network_result_list, self.disk_result_list]
         fps = [fps['fps'] for fps in self.fps_result_list if 'fps' in fps]
@@ -223,17 +222,15 @@ class PerformanceAnalyzer:
         average_cpu = statistics.mean(cpu) if cpu else 0
         sheet_names = ['AppPerformance', 'fps', 'memory', 'network', 'disk']
         self.fps_result_list.append({'fps_value': average_fps})
-        self.app_performance_result_list.append({'Memory_Average': f"MemoryAverage:{average_mem}", 'CPU_Average': f"CPUAverage:{average_cpu}"})
+        self.app_performance_result_list.append({'Memory_Average': f"MemoryAverage:{average_mem}",
+                                                 'CPU_Average': f"CPUAverage:{average_cpu}"})
         if self.cpu_result_list.__len__() > 0:
             all_dict_lists.append(self.cpu_result_list)
             sheet_names.append("cpu")
-        # 创建一个新的 Excel 文件
         current_date = datetime.now().strftime('%Y%m%d_%H_%M_%S')
         with pd.ExcelWriter(f'apm_{current_date}.xlsx', engine='openpyxl') as writer:
             for dict_list, sheet_name in zip(all_dict_lists, sheet_names):
-                # 将字典列表转换为 DataFrame
                 df = pd.DataFrame(dict_list)
-                # 将 DataFrame 写入指定的工作表
                 df.to_excel(writer, sheet_name=sheet_name, index=False)
 
         print("报告创建成功！")
@@ -270,8 +267,8 @@ if __name__ == '__main__':
     lockdown = create_using_usbmux(device[0].serial, autopair=False, connection_type=device[0].connection_type,
                                    usbmux_address=None)
     ios_version = Version(lockdown.short_info.get('ProductVersion'))
-    bundle_id = "com.habby.capybara"
-    udid = lockdown.short_info.get("UniqueDeviceID")  # 改为你的手机id
+    bundle_id = "com.habby.capybara"  # 改为你要测的应用包名
+    udid = lockdown.short_info.get("UniqueDeviceID")
     tunnel_manager = TunnelManager()
     tunnel_manager.get_tunnel()
     stop_even = threading.Event()
@@ -296,7 +293,7 @@ if __name__ == '__main__':
         # gpu_thread.start()  # 先不要启这个，这个貌似有点问题，这个用来抓gpu的
 
         # 设置运行时间，例如3分钟后停止
-        time.sleep(15)  # 先在这里弄一下demo
+        time.sleep(15)  # 先在这里弄一下demo，自己改一下时间
         stop_even.set()
 
         sysmontap_thread.join()
